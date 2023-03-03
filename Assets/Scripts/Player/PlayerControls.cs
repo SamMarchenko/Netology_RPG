@@ -35,6 +35,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SwordAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""2bef921e-4ec0-4eb8-99b9-ae3104d5e6da"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShieldAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""ffe319e2-5c2b-4096-a834-ee745b1fa516"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -92,6 +110,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a2fde738-5304-4169-9e84-3cbba6e6e671"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwordAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8a4ee0bf-9af7-4723-9333-40e279cc727f"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShieldAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -101,6 +141,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // Unit
         m_Unit = asset.FindActionMap("Unit", throwIfNotFound: true);
         m_Unit_Move = m_Unit.FindAction("Move", throwIfNotFound: true);
+        m_Unit_SwordAttack = m_Unit.FindAction("SwordAttack", throwIfNotFound: true);
+        m_Unit_ShieldAttack = m_Unit.FindAction("ShieldAttack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -163,11 +205,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Unit;
     private List<IUnitActions> m_UnitActionsCallbackInterfaces = new List<IUnitActions>();
     private readonly InputAction m_Unit_Move;
+    private readonly InputAction m_Unit_SwordAttack;
+    private readonly InputAction m_Unit_ShieldAttack;
     public struct UnitActions
     {
         private @PlayerControls m_Wrapper;
         public UnitActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Unit_Move;
+        public InputAction @SwordAttack => m_Wrapper.m_Unit_SwordAttack;
+        public InputAction @ShieldAttack => m_Wrapper.m_Unit_ShieldAttack;
         public InputActionMap Get() { return m_Wrapper.m_Unit; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -180,6 +226,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @SwordAttack.started += instance.OnSwordAttack;
+            @SwordAttack.performed += instance.OnSwordAttack;
+            @SwordAttack.canceled += instance.OnSwordAttack;
+            @ShieldAttack.started += instance.OnShieldAttack;
+            @ShieldAttack.performed += instance.OnShieldAttack;
+            @ShieldAttack.canceled += instance.OnShieldAttack;
         }
 
         private void UnregisterCallbacks(IUnitActions instance)
@@ -187,6 +239,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @SwordAttack.started -= instance.OnSwordAttack;
+            @SwordAttack.performed -= instance.OnSwordAttack;
+            @SwordAttack.canceled -= instance.OnSwordAttack;
+            @ShieldAttack.started -= instance.OnShieldAttack;
+            @ShieldAttack.performed -= instance.OnShieldAttack;
+            @ShieldAttack.canceled -= instance.OnShieldAttack;
         }
 
         public void RemoveCallbacks(IUnitActions instance)
@@ -207,5 +265,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface IUnitActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnSwordAttack(InputAction.CallbackContext context);
+        void OnShieldAttack(InputAction.CallbackContext context);
     }
 }

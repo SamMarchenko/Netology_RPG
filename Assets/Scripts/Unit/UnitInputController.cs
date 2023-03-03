@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,17 +6,14 @@ using UnityEngine;
 public class UnitInputController : MonoBehaviour
 {
     protected Vector3 _movement;
-
+    
+    
     public ref Vector3 MoveDirection => ref _movement;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    
+    public delegate void Attack();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public event Attack OnAttackEvent;
+    
+    protected void CallOnAttackEvent() => OnAttackEvent?.Invoke();
+
 }

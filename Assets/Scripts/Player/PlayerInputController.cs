@@ -1,16 +1,24 @@
 ﻿
     using System;
     using UnityEngine;
+    using UnityEngine.InputSystem;
 
     public class PlayerInputController : UnitInputController
     {
         private PlayerControls _controls;
         
-
         private void Awake()
         {
             _controls = new PlayerControls();
+            _controls.Unit.SwordAttack.performed += OnSwordAttack;
         }
+
+        public void OnSwordAttack(InputAction.CallbackContext obj)
+        {
+            CallOnAttackEvent();
+        }
+        
+        
 
         private void Update()
         {
@@ -33,6 +41,7 @@
 
         private void OnDestroy()
         {
+            _controls.Unit.SwordAttack.performed -= OnSwordAttack;
             _controls.Dispose();
         }
     }
